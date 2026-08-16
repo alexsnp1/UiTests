@@ -28,7 +28,7 @@ public class RequestSpecs {
 
     public static RequestSpecification adminAuthSpec() {
         return defaultRequestBuilder()
-                .addHeader(Headers.AUTHORIZATION, "Basic YWRtaW46YWRtaW4=")
+                .addHeader(Headers.AUTHORIZATION, Config.getProperty("admin.auth"))
                 .build();
     }
 

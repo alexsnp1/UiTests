@@ -22,11 +22,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class TransferringFunds {
     private static String authTokenUser1;
-    private static String authTokenUser2;
     private static int user1Id1;
     private static int user1Id2;
     private static final double INITIAL_DEPOSIT = 5000;
-    private static final double MONEY_ASSERT_DELTA = 0.03;
     private static final double TRANSFER_AMOUNT = RandomData.getRandomTransferAmount();
     private static final int NON_EXISTENT_ACCOUNT_ID = RandomData.getRandomNonExistentId();
 
@@ -36,7 +34,6 @@ public class TransferringFunds {
         Configuration.baseUrl = "http://192.168.1.133:3000";
         Configuration.browser = "chrome";
         Configuration.browserSize = "1920x1080";
-
 
         Configuration.browserCapabilities.setCapability("selenoid:options",
                 Map.of("enableVNC", true, "enableLog", true)
