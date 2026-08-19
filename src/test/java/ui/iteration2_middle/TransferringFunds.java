@@ -1,12 +1,11 @@
 package ui.iteration2_middle;
 
 import api.iteration2_senior.models.AdminCreateUserRequest;
+import api.iteration2_senior.models.CustomerAccountsGetResponse;
 import api.iteration2_senior.models.UserCreateAccountResponse;
-import api.iteration2_senior.requests.steps.AccountCreationStep;
-import api.iteration2_senior.requests.steps.AuthenticationStep;
-import api.iteration2_senior.requests.steps.DepositFundsStep;
-import api.iteration2_senior.requests.steps.UserCreationStep;
+import api.iteration2_senior.requests.steps.*;
 import api.iteration2_senior.utils.RandomData;
+import api.iteration2_senior.utils.TestUtils;
 import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +25,6 @@ public class TransferringFunds extends BaseUiTest {
     private static final int NON_EXISTENT_ACCOUNT_ID = RandomData.getRandomNonExistentId();
     private DashboardPage dashboardPage = new DashboardPage();
     private TransferPage transferPage = new TransferPage();
-
 
     @BeforeEach
     public void prepareTestData() {
@@ -51,14 +49,23 @@ public class TransferringFunds extends BaseUiTest {
         dashboardPage.open().pressMakeATransferButton();
         double account2BalanceBeforeDeposit = transferPage.selectAccount(user1Id2).getSelectedAccountBalance();
         double account1BalanceBeforeDeposit = transferPage.selectAccount(user1Id1).getSelectedAccountBalance();
+        CustomerAccountsGetResponse[] apiAccountsBeforeTransfer = CustomerAccountStep.getCustomerAccountResponse(authTokenUser1);
+
         transferPage.makeTransfer(user1Id2, TRANSFER_AMOUNT)
                 .checkAlertMessageAndAccept(BankAlert.transferSuccessful(TRANSFER_AMOUNT, user1Id2))
                 .shouldHaveSendTransferButton();
         Selenide.refresh();
+
         double account2BalanceAfterDeposit = transferPage.selectAccount(user1Id2).getSelectedAccountBalance();
         double account1BalanceAfterDeposit = transferPage.selectAccount(user1Id1).getSelectedAccountBalance();
+        CustomerAccountsGetResponse[] apiAccountsAfterTransfer = CustomerAccountStep.getCustomerAccountResponse(authTokenUser1);
+
         softly.assertThat(account1BalanceBeforeDeposit - TRANSFER_AMOUNT).isEqualTo(account1BalanceAfterDeposit, offset(MONEY_ASSERT_DELTA));
         softly.assertThat(account2BalanceBeforeDeposit + TRANSFER_AMOUNT).isEqualTo(account2BalanceAfterDeposit, offset(MONEY_ASSERT_DELTA));
+        softly.assertThat(TestUtils.findAccountById(apiAccountsBeforeTransfer, user1Id1).getBalance())
+                .isEqualTo(TestUtils.findAccountById(apiAccountsAfterTransfer, user1Id1).getBalance() + TRANSFER_AMOUNT, offset(MONEY_ASSERT_DELTA));
+        softly.assertThat(TestUtils.findAccountById(apiAccountsBeforeTransfer, user1Id2).getBalance())
+                .isEqualTo(TestUtils.findAccountById(apiAccountsAfterTransfer, user1Id2).getBalance() - TRANSFER_AMOUNT, offset(MONEY_ASSERT_DELTA));
     }
 
     @Test
@@ -67,14 +74,22 @@ public class TransferringFunds extends BaseUiTest {
         dashboardPage.open().pressMakeATransferButton();
         double account2BalanceBeforeDeposit = transferPage.selectAccount(user1Id2).getSelectedAccountBalance();
         double account1BalanceBeforeDeposit = transferPage.selectAccount(user1Id1).getSelectedAccountBalance();
+        CustomerAccountsGetResponse[] apiAccountsBeforeTransfer = CustomerAccountStep.getCustomerAccountResponse(authTokenUser1);
+
         transferPage.makeTransfer(user1Id2, RandomData.getRandomTransferAmountGreaterThan10000())
                 .checkAlertMessageAndAccept(BankAlert.TRANSFER_AMOUNT_CANNOT_EXCEED_10000.getMessage())
                 .shouldHaveSendTransferButton();
         Selenide.refresh();
         double account2BalanceAfterDeposit = transferPage.selectAccount(user1Id2).getSelectedAccountBalance();
         double account1BalanceAfterDeposit = transferPage.selectAccount(user1Id1).getSelectedAccountBalance();
+        CustomerAccountsGetResponse[] apiAccountsAfterTransfer = CustomerAccountStep.getCustomerAccountResponse(authTokenUser1);
+
         softly.assertThat(account1BalanceBeforeDeposit).isEqualTo(account1BalanceAfterDeposit, offset(MONEY_ASSERT_DELTA));
         softly.assertThat(account2BalanceBeforeDeposit).isEqualTo(account2BalanceAfterDeposit, offset(MONEY_ASSERT_DELTA));
+        softly.assertThat(TestUtils.findAccountById(apiAccountsBeforeTransfer, user1Id1).getBalance())
+                .isEqualTo(TestUtils.findAccountById(apiAccountsAfterTransfer, user1Id1).getBalance(), offset(MONEY_ASSERT_DELTA));
+        softly.assertThat(TestUtils.findAccountById(apiAccountsBeforeTransfer, user1Id2).getBalance())
+                .isEqualTo(TestUtils.findAccountById(apiAccountsAfterTransfer, user1Id2).getBalance(), offset(MONEY_ASSERT_DELTA));
 
     }
 
@@ -83,12 +98,17 @@ public class TransferringFunds extends BaseUiTest {
         authAsUser(authTokenUser1);
         dashboardPage.open().pressMakeATransferButton();
         double account1BalanceBeforeDeposit = transferPage.selectAccount(user1Id1).getSelectedAccountBalance();
+        CustomerAccountsGetResponse[] apiAccountsBeforeTransfer = CustomerAccountStep.getCustomerAccountResponse(authTokenUser1);
+
         transferPage.makeTransfer(NON_EXISTENT_ACCOUNT_ID, TRANSFER_AMOUNT)
                 .checkAlertMessageAndAccept(BankAlert.NO_USER_FOUND_WITH_THIS_ACCOUNT_NUMBER.getMessage())
                 .shouldHaveSendTransferButton();
         Selenide.refresh();
         double account1BalanceAfterDeposit = transferPage.selectAccount(user1Id1).getSelectedAccountBalance();
+        CustomerAccountsGetResponse[] apiAccountsAfterTransfer = CustomerAccountStep.getCustomerAccountResponse(authTokenUser1);
 
         softly.assertThat(account1BalanceBeforeDeposit).isEqualTo(account1BalanceAfterDeposit, offset(MONEY_ASSERT_DELTA));
+        softly.assertThat(TestUtils.findAccountById(apiAccountsBeforeTransfer, user1Id1).getBalance())
+                .isEqualTo(TestUtils.findAccountById(apiAccountsAfterTransfer, user1Id1).getBalance(), offset(MONEY_ASSERT_DELTA));
     }
 }

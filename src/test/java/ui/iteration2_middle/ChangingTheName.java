@@ -2,6 +2,7 @@ package ui.iteration2_middle;
 
 import api.iteration2_senior.models.AdminCreateUserRequest;
 import api.iteration2_senior.requests.steps.AuthenticationStep;
+import api.iteration2_senior.requests.steps.CustomerProfileStep;
 import api.iteration2_senior.requests.steps.UserCreationStep;
 import api.iteration2_senior.utils.RandomData;
 import com.codeborne.selenide.Selenide;
@@ -33,6 +34,7 @@ public class ChangingTheName extends BaseUiTest {
                 .shouldHaveEditProfileHeader();
         Selenide.refresh();
         editProfilePage.nameShouldBeVisible(validName);
+        softly.assertThat(CustomerProfileStep.getCustomerProfileResponse(authTokenUser).getName()).isEqualTo(validName);
     }
 
     @Test
@@ -45,5 +47,6 @@ public class ChangingTheName extends BaseUiTest {
                 .shouldHaveEditProfileHeader();
         Selenide.refresh();
         editProfilePage.nameShouldBeVisible(name);
+        softly.assertThat(CustomerProfileStep.getCustomerProfileResponse(authTokenUser).getName()).isNull();
     }
 }
