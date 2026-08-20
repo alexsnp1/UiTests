@@ -1,5 +1,6 @@
 package api.iteration2_senior.generators;
 
+import api.iteration2_senior.generators.GeneratingRule;
 import com.github.curiousoddman.rgxgen.RgxGen;
 
 import java.lang.reflect.Field;

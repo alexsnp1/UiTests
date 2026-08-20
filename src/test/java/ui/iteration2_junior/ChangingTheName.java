@@ -9,6 +9,7 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Alert;
 
@@ -22,8 +23,8 @@ public class ChangingTheName {
     private static final String validName = RandomData.getRandomValidName();
     private static final String invalidName = RandomData.getRandomInvalidName();
 
-    @BeforeAll
-    public static void setupSelenoid() {
+    @BeforeEach
+    public void setupSelenoid() {
         Configuration.remote = "http://localhost:4444/wd/hub";
         Configuration.baseUrl = "http://192.168.1.133:3000";
         Configuration.browser = "chrome";

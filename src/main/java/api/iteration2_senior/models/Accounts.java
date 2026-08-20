@@ -1,5 +1,6 @@
 package api.iteration2_senior.models;
 
+import api.iteration2_senior.models.Transactions;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

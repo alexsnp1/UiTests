@@ -1,12 +1,12 @@
 package api.iteration2_senior.requests.steps;
 
-import api.iteration2_senior.utils.Headers;
 import api.iteration2_senior.models.AdminCreateUserRequest;
 import api.iteration2_senior.models.UserLoginRequest;
 import api.iteration2_senior.requests.skeleton.requesters.CrudRequester;
 import api.iteration2_senior.requests.skeleton.requesters.Endpoint;
 import api.iteration2_senior.specs.RequestSpecs;
 import api.iteration2_senior.specs.ResponseSpecs;
+import api.iteration2_senior.utils.Headers;
 
 public class AuthenticationStep {
     public static String getUserTokenStep(AdminCreateUserRequest user) {

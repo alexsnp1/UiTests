@@ -1,11 +1,11 @@
 package api.iteration2_senior.requests.skeleton.requesters;
 
-import io.restassured.response.ValidatableResponse;
-import io.restassured.specification.RequestSpecification;
-import io.restassured.specification.ResponseSpecification;
 import api.iteration2_senior.models.BaseModel;
 import api.iteration2_senior.requests.skeleton.HttpRequest;
 import api.iteration2_senior.requests.skeleton.interfaces.CrudEndpointInterface;
+import io.restassured.response.ValidatableResponse;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 
 import static io.restassured.RestAssured.given;
 

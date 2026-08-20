@@ -1,11 +1,11 @@
 package ui.middle.pages;
 
+
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.Alert;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.switchTo;
+import static com.codeborne.selenide.Selenide.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class BasePage<T extends BasePage> {
@@ -26,7 +26,6 @@ public abstract class BasePage<T extends BasePage> {
     public T checkAlertMessageAndAccept(String expectedMessage) {
         Alert alert = switchTo().alert();
         assertThat(alert.getText().contains(expectedMessage)).isTrue();
-        alert.accept();
         return (T) this;
     }
 
@@ -41,5 +40,10 @@ public abstract class BasePage<T extends BasePage> {
                         .getSelectedOption()
                         .getText()
                         .replaceAll(".*\\$([0-9.]+).*", "$1"));
+    }
+
+    public static void authAsUser(String authTokenUser) {
+        Selenide.open("/");
+        executeJavaScript("localStorage.setItem('authToken', arguments[0]);", authTokenUser);
     }
 }

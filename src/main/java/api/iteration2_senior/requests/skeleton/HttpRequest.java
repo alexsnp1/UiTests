@@ -1,8 +1,8 @@
 package api.iteration2_senior.requests.skeleton;
 
+import api.iteration2_senior.requests.skeleton.requesters.Endpoint;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
-import api.iteration2_senior.requests.skeleton.requesters.Endpoint;
 
 public abstract class HttpRequest {
     protected RequestSpecification requestSpecification;

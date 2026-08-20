@@ -1,6 +1,5 @@
 package api.iteration2_senior.models;
 
-import api.iteration2_senior.configs.Config;
 import api.iteration2_senior.generators.GeneratingRule;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -55,6 +55,7 @@ public class TransferringFundsTest extends BaseApiTest {
         DepositFundsStep.depositFunds(authTokenUser1, user1Id1, INITIAL_DEPOSIT);
         DepositFundsStep.depositFunds(authTokenUser1, user1Id1, INITIAL_DEPOSIT);
         DepositFundsStep.depositFunds(authTokenUser1, user1Id1, INITIAL_DEPOSIT);
+        DepositFundsStep.depositFunds(authTokenUser1, user1Id1, INITIAL_DEPOSIT);
     }
 
     @ParameterizedTest
