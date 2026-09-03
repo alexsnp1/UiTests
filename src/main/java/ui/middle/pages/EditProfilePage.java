@@ -22,9 +22,16 @@ public class EditProfilePage extends BasePage<EditProfilePage> {
         return this;
     }
 
-    public EditProfilePage changeName(String newName) {
-        newNameInput.setValue(newName);
-        saveChangesButton.click();
+    public EditProfilePage enterNewName(String newName) {
+        newNameInput.click();
+        newNameInput.clear();
+        newNameInput.sendKeys(newName);
+        newNameInput.shouldHave(Condition.value(newName));
+        return this;
+    }
+
+    public EditProfilePage pressSaveChangesButton() {
+        saveChangesButton.shouldBe(Condition.interactable).click();
         return this;
     }
 

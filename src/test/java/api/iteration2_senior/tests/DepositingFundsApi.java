@@ -1,8 +1,5 @@
 package api.iteration2_senior.tests;
 
-import io.restassured.RestAssured;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
 import api.iteration2_senior.models.*;
 import api.iteration2_senior.requests.skeleton.requesters.CrudRequester;
 import api.iteration2_senior.requests.skeleton.requesters.Endpoint;
@@ -12,29 +9,26 @@ import api.iteration2_senior.specs.ResponseSpecs;
 import api.iteration2_senior.utils.RandomData;
 import api.iteration2_senior.utils.TestUtils;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.offset;
 
-public class DepositingFundsTest extends BaseApiTest {
-    private static String authTokenUser1;
-    private static String authTokenUser2;
-    private static int user1Id1;
-    private static int user2Id1;
+public class DepositingFundsApi extends BaseTest {
+    private String authTokenUser1;
+    private String authTokenUser2;
+    private int user1Id1;
+    private int user2Id1;
     private static final double MONEY_ASSERT_DELTA = 0.01;
-    private static final double DEPOSIT_AMOUNT = RandomData.getRandomDepositAmount();
-    private static final int NON_EXISTENT_ACCOUNT_ID = RandomData.getRandomNonExistentId();
+    private final double DEPOSIT_AMOUNT = RandomData.getRandomDepositAmount();
+    private final int NON_EXISTENT_ACCOUNT_ID = RandomData.getRandomNonExistentId();
 
-    @BeforeAll
-    public static void setUp() {
+    @BeforeEach
+    public void setUp() {
         ///USER 1
-        RestAssured.filters(List.of(new RequestLoggingFilter(), new ResponseLoggingFilter()));
         AdminCreateUserRequest user1 = UserCreationStep.createUserRequest();
         authTokenUser1 = AuthenticationStep.getUserTokenStep(user1);
         UserCreateAccountResponse response1User1 = AccountCreationStep.userCreateAccount(authTokenUser1);

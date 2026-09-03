@@ -8,8 +8,6 @@ import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 
-import java.util.List;
-
 public class RequestSpecs {
     private RequestSpecs() {
     }
@@ -18,7 +16,8 @@ public class RequestSpecs {
         return new RequestSpecBuilder()
                 .setContentType(ContentType.JSON)
                 .setAccept(ContentType.JSON)
-                .addFilters(List.of(new RequestLoggingFilter(), new ResponseLoggingFilter()))
+//                .addFilter(new RequestLoggingFilter())
+//                .addFilter(new ResponseLoggingFilter())
                 .setBaseUri(Config.getProperty("server") + Config.getProperty("apiVersion"));
     }
 

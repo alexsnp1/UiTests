@@ -8,12 +8,14 @@ import api.iteration2_senior.requests.skeleton.requesters.Endpoint;
 import api.iteration2_senior.specs.RequestSpecs;
 import api.iteration2_senior.specs.ResponseSpecs;
 
+import java.util.UUID;
+
 public class UserCreationStep {
     public static AdminCreateUserRequest createUserRequest() {
         AdminCreateUserRequest credentials = RandomModelGenerator.generate(AdminCreateUserRequest.class);
 
         AdminCreateUserRequest user = AdminCreateUserRequest.builder()
-                .username(credentials.getUsername())
+                .username(uniqueUsername())
                 .password(credentials.getPassword())
                 .role(UserRole.USER.toString())
                 .build();
@@ -23,5 +25,11 @@ public class UserCreationStep {
                 ResponseSpecs.returnsCreated())
                 .post(user);
         return user;
+    }
+    private static String uniqueUsername() {
+        return "u" + UUID.randomUUID()
+                .toString()
+                .replace("-", "")
+                .substring(0, 14);
     }
 }

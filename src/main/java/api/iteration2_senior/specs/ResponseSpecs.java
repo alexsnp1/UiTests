@@ -15,6 +15,7 @@ public class ResponseSpecs {
     }
 
     public static ResponseSpecification returnsCreated() {
+
         return defaultResponseBuilder()
                 .expectStatusCode(HttpStatus.SC_CREATED)
                 .build();

@@ -58,5 +58,15 @@
             <artifactId>assertj-core</artifactId>
             <version>3.27.7</version>
         </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-devtools-v138</artifactId>
+            <version>4.34.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.java-websocket</groupId>
+            <artifactId>Java-WebSocket</artifactId>
+            <version>1.5.7</version>
+        </dependency>
     </dependencies>
 </project>

@@ -1,7 +1,7 @@
 package ui.iteration2_middle;
 
 import api.iteration2_senior.configs.Config;
-import api.iteration2_senior.tests.BaseApiTest;
+import api.iteration2_senior.tests.BaseTest;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.BeforeAll;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 
-public class BaseUiTest extends BaseApiTest {
+public class BaseUiTest extends BaseTest {
     @BeforeAll
     public static void setupSelenoid() {
         Configuration.remote = Config.getProperty("uiRemote");

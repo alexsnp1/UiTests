@@ -1,8 +1,5 @@
 package api.iteration2_senior.tests;
 
-import io.restassured.RestAssured;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
 import api.iteration2_senior.models.*;
 import api.iteration2_senior.requests.skeleton.requesters.CrudRequester;
 import api.iteration2_senior.requests.skeleton.requesters.Endpoint;
@@ -12,30 +9,27 @@ import api.iteration2_senior.specs.ResponseSpecs;
 import api.iteration2_senior.utils.RandomData;
 import api.iteration2_senior.utils.TestUtils;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.offset;
 
-public class TransferringFundsTest extends BaseApiTest {
-    private static String authTokenUser1;
-    private static String authTokenUser2;
-    private static int user1Id1;
-    private static int user1Id2;
-    private static int user2Id1;
+public class TransferringFundsApi extends BaseTest {
+    private String authTokenUser1;
+    private String authTokenUser2;
+    private int user1Id1;
+    private int user1Id2;
+    private int user2Id1;
     private static final double INITIAL_DEPOSIT = 5000;
     private static final double MONEY_ASSERT_DELTA = 0.03;
-    private static final double TRANSFER_AMOUNT = RandomData.getRandomTransferAmount();
-    private static final int NON_EXISTENT_ACCOUNT_ID = RandomData.getRandomNonExistentId();
+    private final double TRANSFER_AMOUNT = RandomData.getRandomTransferAmount();
+    private final int NON_EXISTENT_ACCOUNT_ID = RandomData.getRandomNonExistentId();
 
-    @BeforeAll
-    public static void setUp() {
-        RestAssured.filters(List.of(new RequestLoggingFilter(), new ResponseLoggingFilter()));
+    @BeforeEach
+    public void setUp() {
         /// USER 1
         AdminCreateUserRequest user1 = UserCreationStep.createUserRequest();
         authTokenUser1 = AuthenticationStep.getUserTokenStep(user1);
@@ -50,12 +44,9 @@ public class TransferringFundsTest extends BaseApiTest {
         user2Id1 = response1User2.getId();
 
         //deposit to acc1 user 1
-        DepositFundsStep.depositFunds(authTokenUser1, user1Id1, INITIAL_DEPOSIT);
-        DepositFundsStep.depositFunds(authTokenUser1, user1Id1, INITIAL_DEPOSIT);
-        DepositFundsStep.depositFunds(authTokenUser1, user1Id1, INITIAL_DEPOSIT);
-        DepositFundsStep.depositFunds(authTokenUser1, user1Id1, INITIAL_DEPOSIT);
-        DepositFundsStep.depositFunds(authTokenUser1, user1Id1, INITIAL_DEPOSIT);
-        DepositFundsStep.depositFunds(authTokenUser1, user1Id1, INITIAL_DEPOSIT);
+        for (int i = 0; i < 2; i++) {
+            DepositFundsStep.depositFunds(authTokenUser1, user1Id1, INITIAL_DEPOSIT);
+        }
     }
 
     @ParameterizedTest

@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.offset;
 
 @Browsers({"chrome"})
 @UserSession()
-public class DepositingFunds extends BaseUiTest {
+public class DepositingFundsTests extends BaseUiTest {
     private UserSessionData user;
     private final double DEPOSIT_AMOUNT = RandomData.getRandomDepositAmount();
     private static final double MONEY_ASSERT_DELTA = 0.01;
@@ -36,7 +36,7 @@ public class DepositingFunds extends BaseUiTest {
         double accountBalanceBeforeDeposit = depositPage.selectAccount(user.getAccountId()).getSelectedAccountBalance();
         CustomerAccountsGetResponse[] apiAccountBalanceBeforeDeposit = CustomerAccountStep.getCustomerAccountResponse(user.getAuthToken());
 
-        depositPage.deposit(DEPOSIT_AMOUNT)
+        depositPage.setDepositAmount(DEPOSIT_AMOUNT).depositButtonClick()
                 .checkAlertMessageAndAccept(BankAlert.depositSuccessful(DEPOSIT_AMOUNT, user.getAccountId()))
                 .getPage(DashboardPage.class).checkUserDashboardTextIsVisible()
                 .pressDepositMoneyButton();
@@ -54,7 +54,8 @@ public class DepositingFunds extends BaseUiTest {
         double accountBalanceBeforeDeposit = depositPage.selectAccount(user.getAccountId()).getSelectedAccountBalance();
         CustomerAccountsGetResponse[] apiAccountBalanceBeforeDeposit = CustomerAccountStep.getCustomerAccountResponse(user.getAuthToken());
 
-        depositPage.deposit(RandomData.getRandomDepositAmountGreaterThan5000())
+        depositPage.setDepositAmount(RandomData.getRandomDepositAmountGreaterThan5000())
+                .depositButtonClick()
                 .checkAlertMessageAndAccept(BankAlert.PLEASE_DEPOSIT_LESS_OR_EQUAL_TO_5000$.getMessage())
                 .shouldHaveDepositMoneyHeader().getPage(DashboardPage.class).pressDepositMoneyButton();
         double accountBalanceAfterDeposit = depositPage.selectAccount(user.getAccountId()).getSelectedAccountBalance();

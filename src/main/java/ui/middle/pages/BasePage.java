@@ -1,17 +1,25 @@
 package ui.middle.pages;
 
 
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.Alert;
+import com.codeborne.selenide.ex.AlertNotFoundError;
+
+import java.time.Duration;
+import java.util.Arrays;
 
 import static com.codeborne.selenide.Selenide.*;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class BasePage<T extends BasePage> {
-    private SelenideElement accountDropDown = $(".form-control.account-selector");
+    private SelenideElement accountDropDown = $("select.account-selector");
     protected SelenideElement nameOfUser = $(".user-name");
-
+    private static final int MAX_ALERT_ATTEMPTS = 3;
+    private static final int SLEEP_TIME = 5000;
+    private static final Duration ALERT_WAIT_PER_ATTEMPT =
+            Duration.ofSeconds(30);
 
     public abstract String url();
 
@@ -23,14 +31,42 @@ public abstract class BasePage<T extends BasePage> {
         return Selenide.page(pageClass);
     }
 
-    public T checkAlertMessageAndAccept(String expectedMessage) {
-        Alert alert = switchTo().alert();
-        assertThat(alert.getText().contains(expectedMessage)).isTrue();
-        return (T) this;
+    public T checkAlertMessageAndAccept(String... expectedMessages) {
+        for (int attempt = 1; attempt < MAX_ALERT_ATTEMPTS; attempt++) {
+            try {
+                Alert alert = switchTo().alert(ALERT_WAIT_PER_ATTEMPT);
+                String actualMessage = alert.getText();
+                if (!Arrays.asList(expectedMessages).contains(actualMessage)) {
+                    alert.accept();
+
+                    throw new AssertionError(
+                            "Unexpected alert message. Expected one of: "
+                                    + Arrays.toString(expectedMessages)
+                                    + ", but was: "
+                                    + actualMessage
+                    );
+                }
+                alert.accept();
+                return (T) this;
+            } catch (AlertNotFoundError ignored) {
+            }
+            try {
+                Thread.sleep(SLEEP_TIME);
+            } catch (InterruptedException exception) {
+                throw new RuntimeException(exception);
+            }
+        }
+        throw new AssertionError("Alert was not found");
     }
 
     public T selectAccount(int userId) {
-        accountDropDown.selectOptionByValue(String.valueOf(userId));
+        String accountValue = String.valueOf(userId);
+
+        accountDropDown
+                .$(Selectors.byAttribute("value", accountValue))
+                .shouldBe(Condition.exist, Duration.ofSeconds(30));
+        accountDropDown.selectOptionByValue(accountValue);
+
         return (T) this;
     }
 

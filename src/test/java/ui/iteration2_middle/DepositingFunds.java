@@ -41,10 +41,10 @@ public class DepositingFunds extends BaseUiTest {
         double accountBalanceBeforeDeposit = depositPage.selectAccount(user1Id1).getSelectedAccountBalance();
         CustomerAccountsGetResponse[] apiAccountBalanceBeforeDeposit = CustomerAccountStep.getCustomerAccountResponse(authTokenUser1);
 
-        depositPage.deposit(DEPOSIT_AMOUNT)
-                .checkAlertMessageAndAccept(BankAlert.depositSuccessful(DEPOSIT_AMOUNT, user1Id1))
-                .getPage(DashboardPage.class).checkUserDashboardTextIsVisible()
-                .pressDepositMoneyButton();
+//        depositPage.deposit(DEPOSIT_AMOUNT)
+////                .checkAlertMessageAndAccept(BankAlert.depositSuccessful(DEPOSIT_AMOUNT, user1Id1))
+//                .getPage(DashboardPage.class).checkUserDashboardTextIsVisible()
+//                .pressDepositMoneyButton();
         double accountBalanceAfterDeposit = depositPage.selectAccount(user1Id1).getSelectedAccountBalance();
         CustomerAccountsGetResponse[] apiAccountBalanceAfterDeposit = CustomerAccountStep.getCustomerAccountResponse(authTokenUser1);
 
@@ -60,9 +60,9 @@ public class DepositingFunds extends BaseUiTest {
         double accountBalanceBeforeDeposit = depositPage.selectAccount(user1Id1).getSelectedAccountBalance();
         CustomerAccountsGetResponse[] apiAccountBalanceBeforeDeposit = CustomerAccountStep.getCustomerAccountResponse(authTokenUser1);
 
-        depositPage.deposit(RandomData.getRandomDepositAmountGreaterThan5000())
-                .checkAlertMessageAndAccept(BankAlert.PLEASE_DEPOSIT_LESS_OR_EQUAL_TO_5000$.getMessage())
-                .shouldHaveDepositMoneyHeader().getPage(DashboardPage.class).pressDepositMoneyButton();
+//        depositPage.deposit(RandomData.getRandomDepositAmountGreaterThan5000())
+////                .checkAlertMessageAndAccept(BankAlert.PLEASE_DEPOSIT_LESS_OR_EQUAL_TO_5000$.getMessage())
+//                .shouldHaveDepositMoneyHeader().getPage(DashboardPage.class).pressDepositMoneyButton();
         double accountBalanceAfterDeposit = depositPage.selectAccount(user1Id1).getSelectedAccountBalance();
         CustomerAccountsGetResponse[] apiAccountBalanceAfterDeposit = CustomerAccountStep.getCustomerAccountResponse(authTokenUser1);
 

@@ -18,7 +18,7 @@ import ui.middle.pages.TransferPage;
 import static org.assertj.core.api.Assertions.offset;
 
 @UserSession(2)
-public class TransferringFunds extends BaseUiTest {
+public class TransferringFundsTests extends BaseUiTest {
     private UserSessionData user1;
     private UserSessionData user2;
     private static final double INITIAL_DEPOSIT = 5000;
@@ -45,7 +45,7 @@ public class TransferringFunds extends BaseUiTest {
         CustomerAccountsGetResponse[] apiAccountsBeforeTransferUser1 = CustomerAccountStep.getCustomerAccountResponse(user1.getAuthToken());
         CustomerAccountsGetResponse[] apiAccountsBeforeTransferUser2 = CustomerAccountStep.getCustomerAccountResponse(user2.getAuthToken());
 
-        transferPage.makeTransfer(user2.getAccountId(), TRANSFER_AMOUNT)
+        transferPage.fillAllTransferFields(user2.getAccountId(), TRANSFER_AMOUNT).pressTransferButton()
                 .checkAlertMessageAndAccept(BankAlert.transferSuccessful(TRANSFER_AMOUNT, user2.getAccountId()))
                 .shouldHaveSendTransferButton();
         Selenide.refresh();
@@ -68,7 +68,7 @@ public class TransferringFunds extends BaseUiTest {
         CustomerAccountsGetResponse[] apiAccountsBeforeTransferUser1 = CustomerAccountStep.getCustomerAccountResponse(user1.getAuthToken());
         CustomerAccountsGetResponse[] apiAccountsBeforeTransferUser2 = CustomerAccountStep.getCustomerAccountResponse(user2.getAuthToken());
 
-        transferPage.makeTransfer(user2.getAccountId(), RandomData.getRandomTransferAmountGreaterThan10000())
+        transferPage.fillAllTransferFields(user2.getAccountId(), RandomData.getRandomTransferAmountGreaterThan10000()).pressTransferButton()
                 .checkAlertMessageAndAccept(BankAlert.TRANSFER_AMOUNT_CANNOT_EXCEED_10000.getMessage())
                 .shouldHaveSendTransferButton();
         Selenide.refresh();
@@ -89,7 +89,7 @@ public class TransferringFunds extends BaseUiTest {
         double account1BalanceBeforeDeposit = transferPage.selectAccount(user1.getAccountId()).getSelectedAccountBalance();
         CustomerAccountsGetResponse[] apiAccountsBeforeTransfer = CustomerAccountStep.getCustomerAccountResponse(user1.getAuthToken());
 
-        transferPage.makeTransfer(NON_EXISTENT_ACCOUNT_ID, TRANSFER_AMOUNT)
+        transferPage.fillAllTransferFields(NON_EXISTENT_ACCOUNT_ID, TRANSFER_AMOUNT).pressTransferButton()
                 .checkAlertMessageAndAccept(BankAlert.NO_USER_FOUND_WITH_THIS_ACCOUNT_NUMBER.getMessage())
                 .shouldHaveSendTransferButton();
         Selenide.refresh();

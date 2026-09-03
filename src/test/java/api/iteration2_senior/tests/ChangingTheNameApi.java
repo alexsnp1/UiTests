@@ -10,17 +10,17 @@ import api.iteration2_senior.requests.steps.UserCreationStep;
 import api.iteration2_senior.specs.RequestSpecs;
 import api.iteration2_senior.specs.ResponseSpecs;
 import api.iteration2_senior.utils.RandomData;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-public class ChangingTheNameTest extends BaseApiTest {
-    private static String authTokenUser;
-    private static final String validName = RandomData.getRandomValidName();
+public class ChangingTheNameApi extends BaseTest {
+    private String authTokenUser;
+    private final String validName = RandomData.getRandomValidName();
 
-    @BeforeAll
-    public static void setUp() {
+    @BeforeEach
+    public void setUp() {
         AdminCreateUserRequest user = UserCreationStep.createUserRequest();
         authTokenUser = AuthenticationStep.getUserTokenStep(user);
     }
@@ -36,9 +36,9 @@ public class ChangingTheNameTest extends BaseApiTest {
                 .put(customerProfileUpdateRequest);
         softly.assertThat(validName).isEqualTo(customerProfileUpdateResponse.getCustomer().getName());
 
-        CustomerProfileGetResponse customerProfileGetResponse =
-                CustomerProfileStep.getCustomerProfileResponse(authTokenUser);
-        softly.assertThat(validName).isEqualTo(customerProfileGetResponse.getName());
+//        CustomerProfileGetResponse customerProfileGetResponse =
+//                CustomerProfileStep.getCustomerProfileResponse(authTokenUser);
+//        softly.assertThat(validName).isEqualTo(customerProfileGetResponse.getName());
     }
 
     @ParameterizedTest

@@ -17,11 +17,18 @@ public class DepositPage extends BasePage<DepositPage> {
         return "/deposit";
     }
 
-    public DepositPage deposit(double depositAmount) {
+    public DepositPage setDepositAmount(double depositAmount) {
         amountInput.sendKeys(String.valueOf(depositAmount));
-        depositButton.click();
         return this;
     }
+    public DepositPage depositButtonClick() {
+        depositButton
+                .shouldBe(Condition.visible)
+                .shouldBe(Condition.enabled)
+                .click();
+        return this;
+    }
+
 
     public DepositPage shouldHaveDepositMoneyHeader() {
         depositMoneyHeader.shouldBe(Condition.visible);

@@ -33,12 +33,12 @@ public enum Endpoint {
             DepositFundsResponse.class
     ),
     ACCOUNTS_TRANSFER(
-            "accounts/transfer",
+            "/accounts/transfer",
             TransferFundsRequest.class,
             TransferFundsResponse.class
     ),
     ACCOUNTS(
-            "accounts",
+            "/accounts",
             BaseModel.class,
             UserCreateAccountResponse.class
     ),

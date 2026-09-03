@@ -26,7 +26,7 @@ public class ChangingTheName {
     @BeforeEach
     public void setupSelenoid() {
         Configuration.remote = "http://localhost:4444/wd/hub";
-        Configuration.baseUrl = "http://192.168.1.133:3000";
+        Configuration.baseUrl = "http://192.168.1.148:3000";
         Configuration.browser = "chrome";
         Configuration.browserSize = "1920x1080";
 

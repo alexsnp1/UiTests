@@ -1,6 +1,7 @@
 package ui.iteration2_senior;
 
 import api.iteration2_senior.requests.steps.CustomerProfileStep;
+import api.iteration2_senior.utils.ProfileRequestWaiter;
 import api.iteration2_senior.utils.RandomData;
 import com.codeborne.selenide.Selenide;
 import common.annotations.UserSession;
@@ -12,8 +13,10 @@ import ui.middle.pages.BankAlert;
 import ui.middle.pages.DashboardPage;
 import ui.middle.pages.EditProfilePage;
 
+import java.time.Duration;
+
 @UserSession()
-public class ChangingTheName extends BaseUiTest {
+public class ChangingTheNameTests extends BaseUiTest {
     private UserSessionData user;
     private final String validName = RandomData.getRandomValidName();
     private final String invalidName = RandomData.getRandomInvalidName();
@@ -27,9 +30,14 @@ public class ChangingTheName extends BaseUiTest {
 
     @Test
     public void userCanRenameThemselves() {
-        dashboardPage.open().pressProfileHeader().getPage(EditProfilePage.class).shouldHaveEditProfileHeader()
-                .changeName(validName).checkAlertMessageAndAccept(BankAlert.NAME_UPDATED_SUCCESSFULLY.getMessage())
-                .shouldHaveEditProfileHeader();
+        dashboardPage.open();
+        ProfileRequestWaiter profileRequestWaiter = new ProfileRequestWaiter();
+        profileRequestWaiter.start();
+        dashboardPage.pressProfileHeader();
+        profileRequestWaiter.waitForTwoRequests(Duration.ofSeconds(60));
+        editProfilePage
+                .shouldHaveEditProfileHeader()
+                .enterNewName(validName).pressSaveChangesButton().checkAlertMessageAndAccept(BankAlert.NAME_UPDATED_SUCCESSFULLY.getMessage()).shouldHaveEditProfileHeader();
         Selenide.refresh();
         editProfilePage.nameShouldBeVisible(validName);
         softly.assertThat(CustomerProfileStep.getCustomerProfileResponse(user.getAuthToken()).getName()).isEqualTo(validName);
@@ -37,10 +45,14 @@ public class ChangingTheName extends BaseUiTest {
 
     @Test
     public void userCannotRenameThemselvesUsingIncorrectName() {
-        dashboardPage.open().pressProfileHeader();
+        dashboardPage.open();
+        ProfileRequestWaiter profileRequestWaiter = new ProfileRequestWaiter();
+        profileRequestWaiter.start();
+        dashboardPage.pressProfileHeader();
+        profileRequestWaiter.waitForTwoRequests(Duration.ofSeconds(60));
         String name = editProfilePage.getNameOfUser();
-        editProfilePage.shouldHaveEditProfileHeader().changeName(invalidName)
-                .checkAlertMessageAndAccept(BankAlert.NAME_MUST_CONTAIN_TWO_WORDS_WITH_LETTERS_ONLY.getMessage())
+        editProfilePage.shouldHaveEditProfileHeader().enterNewName(invalidName).pressSaveChangesButton()
+                .checkAlertMessageAndAccept(BankAlert.NAME_MUST_CONTAIN_TWO_WORDS_WITH_LETTERS_ONLY.getMessage(), BankAlert.PLEASE_ENTER_A_VALID_NAME.getMessage())
                 .shouldHaveEditProfileHeader();
         Selenide.refresh();
         editProfilePage.nameShouldBeVisible(name);

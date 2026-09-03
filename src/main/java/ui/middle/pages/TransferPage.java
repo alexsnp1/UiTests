@@ -19,13 +19,19 @@ public class TransferPage extends BasePage<TransferPage> {
         return "/transfer";
     }
 
-    public TransferPage makeTransfer(int userId, double transferAmount) {
+    public TransferPage fillAllTransferFields(int userId, double transferAmount) {
         String name = nameOfUser.getText();
         recepientNameInput.sendKeys(name);
         recepientAccountNumberInput.sendKeys("ACC" + userId);
         amountInput.sendKeys(String.valueOf(transferAmount));
         confirmationCheckbox.click();
-        sendTransferButton.click();
+        return this;
+    }
+    public TransferPage pressTransferButton() {
+        sendTransferButton
+                .shouldBe(Condition.visible)
+                .shouldBe(Condition.enabled)
+                .click();
         return this;
     }
 
